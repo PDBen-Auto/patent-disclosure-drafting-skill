@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+title: "Patent Disclosure Drafting Skill"
+message: "If this Skill helps your work, cite the repository and release tag."
+type: software
+authors:
+  - family-names: "PDBen-Auto"
+    given-names: "Maintainers"
+repository-code: "https://github.com/PDBen-Auto/patent-disclosure-drafting-skill"
+license: "LicenseRef-Source-Available"
+keywords:
+  - patent-disclosure
+  - patent-technical-disclosure
+  - design-patent
+  - utility-model
+  - patent-figure-numbering
+  - patent-agent-handoff
+  - anonymized-case-study
+  - industrial-design

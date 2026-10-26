@@ -1,0 +1,4 @@
+interface:
+  display_name: "专利技术交底书起草"
+  short_description: "把产品证据整理成外观与结构专利交底包，并校验附图编号和脱敏边界"
+  default_prompt: "使用 $patent-disclosure-drafting 把以下产品资料整理成外观设计和实用新型/实用专利技术交底包，输出部件编号表、附图目录、缺失信息和代理师审查清单。"

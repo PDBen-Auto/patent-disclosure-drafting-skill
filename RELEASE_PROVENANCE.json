@@ -1,0 +1,13 @@
+{
+  "created_at_utc": "2026-10-26T10:53:41Z",
+  "manifest_sha256": "fcf334124ddcf80689146cb97d8fa6113700f30831513a89da5dbaa856d611a6",
+  "origin_id": "681fc6ff-8bed-4639-8038-872cef335b4c",
+  "prompt_neutral": true,
+  "publisher_public_key_sha256": "dca595fdb1066275db29265b9911862ff8e9dbee913b27d916a62ae78ed0529d",
+  "release_version": "v0.1.2",
+  "repository": "https://github.com/PDBen-Auto/patent-disclosure-drafting-skill",
+  "schema_version": "1.0",
+  "scope": "public-skill-package",
+  "signature_alg": "ed25519",
+  "skill_name": "patent-disclosure-drafting"
+}

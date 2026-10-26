@@ -1,0 +1,9 @@
+{
+  "network_behavior": "none",
+  "origin_id": "681fc6ff-8bed-4639-8038-872cef335b4c",
+  "prompt_neutral": true,
+  "publisher_public_key_sha256": "dca595fdb1066275db29265b9911862ff8e9dbee913b27d916a62ae78ed0529d",
+  "record_type": "skill-publisher-origin",
+  "schema_version": "1.0",
+  "skill_name": "patent-disclosure-drafting"
+}

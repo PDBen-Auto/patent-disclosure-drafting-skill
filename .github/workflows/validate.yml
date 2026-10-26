@@ -1,0 +1,33 @@
+name: Validate skill
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate package structure
+        run: python tests/test_skill_structure.py
+      - name: Check synthetic case redaction
+        run: python tests/test_anonymized_example.py
+      - name: Validate Skill frontmatter
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('SKILL.md').read_text(encoding='utf-8')
+          assert text.startswith('---\nname: patent-disclosure-drafting\n')
+          assert '\ndescription: ' in text.split('---', 2)[1]
+          PY

@@ -1,0 +1,61 @@
+name: Publish installable skill release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate package
+        run: |
+          python tests/test_skill_structure.py
+          python tests/test_anonymized_example.py
+      - name: Verify public provenance
+        shell: bash
+        run: |
+          python -m pip install cryptography
+          python - <<'PY'
+          import base64, hashlib, json
+          from pathlib import Path
+          from cryptography.hazmat.primitives.serialization import load_pem_public_key
+          root = Path('.')
+          manifest = (root / 'PUBLIC_MANIFEST.sha256').read_text(encoding='utf-8')
+          payload = json.loads((root / 'RELEASE_PROVENANCE.json').read_text(encoding='utf-8'))
+          assert hashlib.sha256(manifest.encode()).hexdigest() == payload['manifest_sha256']
+          for line in manifest.splitlines():
+              digest, relative = line.split('  ', 1)
+              assert hashlib.sha256((root / relative).read_bytes()).hexdigest() == digest, relative
+          canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()
+          signature = base64.b64decode((root / 'RELEASE_PROVENANCE.sig').read_text().strip(), validate=True)
+          load_pem_public_key((root / 'PUBLISHER_PUBLIC_KEY.pem').read_bytes()).verify(signature, canonical)
+          PY
+      - name: Package installable Skill
+        shell: bash
+        run: |
+          mkdir -p dist/patent-disclosure-drafting
+          git archive --format=tar "${GITHUB_SHA}" | tar -x -C dist/patent-disclosure-drafting
+          cd dist
+          zip -r patent-disclosure-drafting-skill.zip patent-disclosure-drafting
+          sha256sum patent-disclosure-drafting-skill.zip > patent-disclosure-drafting-skill.zip.sha256
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "${{ github.ref_name }}"
+          dist/patent-disclosure-drafting-skill.zip
+          dist/patent-disclosure-drafting-skill.zip.sha256
+          --repo "${{ github.repository }}"
+          --title "Patent Disclosure Drafting Skill ${{ github.ref_name }}"
+          --generate-notes
